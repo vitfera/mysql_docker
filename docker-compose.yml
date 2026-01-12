@@ -21,7 +21,7 @@ services:
       start_period: 10s
 
   phpmyadmin:
-    image: phpmyadmin:5.2.2
+    image: phpmyadmin:5.2.3
     container_name: phpmyadmin_container
     restart: unless-stopped
     depends_on:
