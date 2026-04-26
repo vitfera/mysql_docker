@@ -37,6 +37,31 @@ docker-compose up -d
 
 5. O banco de dados estará disponível na porta 40000.
 
+## Acesso pela rede
+
+O MariaDB está configurado para escutar em todas as interfaces do container (`bind-address=0.0.0.0`) e a porta `40000` é publicada no host.
+
+Em outra máquina da mesma rede, conecte usando o IP da máquina que roda o Docker:
+
+```bash
+mysql -h 192.168.3.85 -P 40000 -u root -p
+```
+
+Se o volume `mysql_data` já existia antes desta configuração, libere o usuário remoto uma vez:
+
+```bash
+docker exec -it mysql_container mariadb -u root -p
+```
+
+```sql
+CREATE OR REPLACE USER 'root'@'%' IDENTIFIED BY 'root';
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
+SHOW VARIABLES LIKE 'bind_address';
+```
+
+O `SHOW VARIABLES` deve retornar `0.0.0.0`.
+
 ## Parar e remover os containers
 
 ```bash
